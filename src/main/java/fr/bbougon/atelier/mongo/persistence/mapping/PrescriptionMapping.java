@@ -10,5 +10,6 @@ public class PrescriptionMapping extends AggregateMap<Prescription> {
     public void map() {
         id().onProperty(Prescription::getId).natural();
         property().onProperty(Prescription::getName);
+        property().onProperty(Prescription::getMedicine);
     }
 }

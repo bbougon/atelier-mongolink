@@ -1,11 +1,14 @@
 package fr.bbougon.atelier.mongo;
 
 import com.mongodb.MongoClient;
-import fr.bbougon.atelier.mongo.domain.Prescription;
+import fr.bbougon.atelier.mongo.domain.*;
+import fr.bbougon.atelier.mongo.domain.Prescription.PrescriptionFactory;
 import fr.bbougon.atelier.mongo.persistence.Repositories;
 import org.junit.*;
 import org.mongolink.*;
 import org.mongolink.domain.mapper.ContextBuilder;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +34,7 @@ public class MongoPrescriptionRepositoryTest {
 
     @Test
     public void canAddPrescription() {
-        Prescription prescription = new Prescription.PrescriptionFactory("prescription").create();
+        Prescription prescription = new PrescriptionFactory("prescription").create();
         Repositories.prescription().add(prescription);
         cleanSession();
 
@@ -43,7 +46,7 @@ public class MongoPrescriptionRepositoryTest {
 
     @Test
     public void canFindByName() {
-        Prescription prescription = new Prescription.PrescriptionFactory("find by name").create();
+        Prescription prescription = new PrescriptionFactory("find by name").create();
         Repositories.prescription().add(prescription);
         cleanSession();
 
@@ -51,6 +54,22 @@ public class MongoPrescriptionRepositoryTest {
 
         assertThat(foundPrescription).isNotNull();
         assertThat(foundPrescription.getName()).isEqualTo("find by name");
+    }
+
+    @Test
+    public void canFindAllPrescriptionsByMedicineName() {
+        Repositories.prescription().add(createPrescription("prescription name", "doliprane"));
+        Repositories.prescription().add(createPrescription("prescription name 2", "doliprane"));
+        Repositories.prescription().add(createPrescription("prescription name 3", "ibuprofene"));
+        cleanSession();
+
+        List<Prescription> prescriptions = Repositories.prescription().findByMedicineName("doliprane");
+
+        assertThat(prescriptions).hasSize(2);
+    }
+
+    private Prescription createPrescription(final String prescriptionName, final String medicineName) {
+        return new PrescriptionFactory(prescriptionName, new Medicine.MedicineFactory(medicineName).create()).create();
     }
 
     private void cleanSession() {

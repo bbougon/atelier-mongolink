@@ -1,7 +1,6 @@
 package fr.bbougon.atelier.mongo.persistence;
 
-import fr.bbougon.atelier.mongo.domain.Prescription;
-import org.mongolink.*;
+import org.mongolink.MongoSession;
 
 public class Repositories {
 
@@ -9,7 +8,7 @@ public class Repositories {
         prescription = new RepositoryPrescription(session);
     }
 
-    public static Repository<Prescription> prescription() {
+    public static RepositoryPrescription prescription() {
         return SingletonHolder.INSTANCE.getPrescription();
     }
 
@@ -17,7 +16,7 @@ public class Repositories {
         SingletonHolder.INSTANCE = new Repositories(session);
     }
 
-    private Repository<Prescription> getPrescription() {
+    private RepositoryPrescription getPrescription() {
         return prescription;
     }
 
@@ -25,5 +24,5 @@ public class Repositories {
         static Repositories INSTANCE;
     }
 
-    private Repository<Prescription> prescription;
+    private RepositoryPrescription prescription;
 }

@@ -28,7 +28,7 @@ public class MongoPrescriptionRepositoryTest {
 
     @After
     public void after() {
-        Repositories.prescription().deleteAll();
+        //Repositories.prescription().deleteAll();
         session.stop();
     }
 

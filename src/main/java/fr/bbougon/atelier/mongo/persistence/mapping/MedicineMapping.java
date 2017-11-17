@@ -7,7 +7,6 @@ import org.mongolink.domain.mapper.AggregateMap;
 public class MedicineMapping extends AggregateMap<Medicine> {
     @Override
     public void map() {
-        id().onProperty(Medicine::getId);
         property().onProperty(Medicine::getName);
     }
 }

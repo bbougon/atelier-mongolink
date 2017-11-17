@@ -1,15 +1,9 @@
 package fr.bbougon.atelier.mongo.domain;
 
-import java.util.UUID;
-
 public class Medicine {
 
     public String getName() {
         return name;
-    }
-
-    public UUID getId() {
-        return id;
     }
 
     public static class MedicineFactory {
@@ -27,5 +21,4 @@ public class Medicine {
     }
 
     private String name;
-    private UUID id = UUID.randomUUID();
 }

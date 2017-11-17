@@ -1,7 +1,6 @@
 package fr.bbougon.atelier.mongo.persistence;
 
 import org.mongolink.MongoSession;
-import org.mongolink.domain.criteria.*;
 
 import java.lang.reflect.ParameterizedType;
 

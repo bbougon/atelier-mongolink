@@ -3,7 +3,6 @@ package fr.bbougon.atelier.mongo.persistence;
 import org.bson.Document;
 import org.mongolink.MongoSession;
 import org.mongolink.domain.criteria.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -11,19 +10,19 @@ import java.util.List;
 public class Repository<T> {
 
     Repository(final MongoSession session) {
-        this.session = null;
+        this.session = session;
     }
 
     public void add(final T entity) {
-        throw new NotImplementedException();
+        session.save(entity);
     }
 
     public T get(final Object id) {
-        return null;
+        return session.get(id, persistenceType());
     }
 
     public void deleteAll() {
-        throw new NotImplementedException();
+        session.getAll(persistenceType()).forEach(session::delete);
     }
 
     private Class<T> persistenceType() {
@@ -32,11 +31,16 @@ public class Repository<T> {
     }
 
     public T findByName(final String name) {
-        return null;
+        Criteria criteria = session.createCriteria(persistenceType());
+        criteria.add(Restrictions.equals("name", name));
+        criteria.limit(1);
+        return (T) criteria.list().stream().findFirst().get();
     }
 
     public List<T> findByMedicineName(final String medicineName) {
-        return null;
+        Criteria criteria = session.createCriteria(persistenceType());
+        criteria.add(Restrictions.equals("medicine.name", medicineName));
+        return criteria.list();
     }
 
     private final MongoSession session;
